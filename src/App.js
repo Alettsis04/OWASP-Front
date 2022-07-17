@@ -1,14 +1,15 @@
 import "./App.css";
+import Footer from "./components/Footer";
 import Menu from "./components/Menu";
 import Navbar from "./components/Navbar";
 
 function App() {
   return (
     <div className="App">
-      <div className="wrapper">
-        <h2>Admin LTE</h2>
+      <div>
         <Navbar />
         <Menu />
+        <Footer />
       </div>
     </div>
   );
