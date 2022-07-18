@@ -1,9 +1,10 @@
-import React from "react";
+import React, { useState } from "react";
+import { Gravedad } from "./Gravedad";
 import Ponderacion from "./Ponderacion";
 import Selector from "./Selector";
 
-const agente = {
-  uno: {
+const agente = [
+  {
     nombre: "Nivel de Habilidad",
     info: "¿Cuán hábil técnicamente consideraría el grupo esperado de agentes amenazantes?",
     opciones: [
@@ -19,7 +20,7 @@ const agente = {
       "9 - Habilidades de penetración de seguridad",
     ],
   },
-  dos: {
+  {
     nombre: "Motivo",
     info: "¿Qué tan motivado está este grupo de agentes de amenazas para encontrar y explotar esta vulnerabilidad?",
     opciones: [
@@ -35,7 +36,7 @@ const agente = {
       "9 - Recompensa alta",
     ],
   },
-  tres: {
+  {
     nombre: "Oportunidad",
     info: "¿Qué recursos y oportunidades se requieren para que este grupo de agentes de amenazas encuentre y explote esta vulnerabilidad?",
     opciones: [
@@ -51,7 +52,7 @@ const agente = {
       "9 - No se requiere acceso ni recursos",
     ],
   },
-  cuatro: {
+  {
     nombre: "Tamaño",
     info: "¿Qué tan grande es este grupo de agentes amenazantes?",
     opciones: [
@@ -67,9 +68,9 @@ const agente = {
       "9 - Usuarios de internet anónimos",
     ],
   },
-};
-const vulnerabilidad = {
-  uno: {
+];
+const vulnerabilidad = [
+  {
     nombre: "Facilidad de descubrimiento",
     info: "¿Qué tan fácil es para este grupo de agentes de amenazas descubrir esta vulnerabilidad?",
     opciones: [
@@ -85,7 +86,7 @@ const vulnerabilidad = {
       "9 - Herramientas automatizadas disponibles",
     ],
   },
-  dos: {
+  {
     nombre: "Facilidad de explotación",
     info: "¿Qué tan fácil es para este grupo de agentes de amenazas explotar esta vulnerabilidad?",
     opciones: [
@@ -101,7 +102,7 @@ const vulnerabilidad = {
       "9 - Herramientas automatizadas disponibles",
     ],
   },
-  tres: {
+  {
     nombre: "Conciencia",
     info: "¿Qué tan conocida es esta vulnerabilidad para este grupo de agentes de amenazas?",
     opciones: [
@@ -117,7 +118,7 @@ const vulnerabilidad = {
       "9 - Conocimiento público",
     ],
   },
-  cuatro: {
+  {
     nombre: "Detección de intrusos",
     info: "¿Qué probabilidad hay de que se detecte un exploit?",
     opciones: [
@@ -133,9 +134,9 @@ const vulnerabilidad = {
       "9 - No registrado",
     ],
   },
-};
-const tecnico = {
-  uno: {
+];
+const tecnico = [
+  {
     nombre: "Pérdida de Confidencialidad",
     info: "¿Cuántos datos podrían divulgarse y qué tan confidenciales son?",
     opciones: [
@@ -151,7 +152,7 @@ const tecnico = {
       "9 - Corrupción de datos total",
     ],
   },
-  dos: {
+  {
     nombre: "Pérdida de Integridad",
     info: "¿Cuántos datos podrían corromperse y qué tan dañados están?",
     opciones: [
@@ -167,7 +168,7 @@ const tecnico = {
       "9 - Corrupción de datos total",
     ],
   },
-  tres: {
+  {
     nombre: "Pérdida de Disponibilidad",
     info: "¿Cuánto servicio podría perderse y cuán vital es?",
     opciones: [
@@ -183,7 +184,7 @@ const tecnico = {
       "9 - Pérdida total de los servicios",
     ],
   },
-  cuatro: {
+  {
     nombre: "Pérdida de Auditabilidad",
     info: "¿Son las acciones de los agentes amenazantes rastreables a un individuo?",
     opciones: [
@@ -199,9 +200,9 @@ const tecnico = {
       "9 - No auditable",
     ],
   },
-};
-const negocio = {
-  uno: {
+];
+const negocio = [
+  {
     nombre: "Daño económico",
     info: "¿Cuánto daño financiero resultará de un exploit?",
     opciones: [
@@ -217,7 +218,7 @@ const negocio = {
       "9 - Efecto devastador (bancarrota)",
     ],
   },
-  dos: {
+  {
     nombre: "Daño en la imagen",
     info: "¿Un exploit resultaría en un daño a la reputación que perjudicaría al negocio?",
     opciones: [
@@ -233,7 +234,7 @@ const negocio = {
       "9 - Daño total de imagen",
     ],
   },
-  tres: {
+  {
     nombre: "No cumplimiento",
     info: "¿Cuánta exposición introduce el incumplimiento?",
     opciones: [
@@ -249,7 +250,7 @@ const negocio = {
       "9",
     ],
   },
-  cuatro: {
+  {
     nombre: "Violación a la privacidad",
     info: "¿Cuánta información de identificación personal podría divulgarse?",
     opciones: [
@@ -265,42 +266,162 @@ const negocio = {
       "9 - Millones de personas",
     ],
   },
-};
+];
 
 const Calculadora = () => {
-  const listarRiesgos = () => {
-    fetch("api/v1/risk/listar", {
+  const [valProbabilidad, setValProbabilidad] = useState(0.0);
+  const [valImpacto, setValImpacto] = useState(0.0);
+  const [valTecnico, setValTecnico] = useState(0.0);
+  const [valNegocio, setValNegocio] = useState(0.0);
+  const [dataRisk, setDataRisk] = useState({
+    nombre: "",
+    habilidad: 0,
+    motivo: 0,
+    oportunidad: 0,
+    tamannio: 0,
+    descubrimiento: 0,
+    explotacion: 0,
+    conciencia: 0,
+    deteccion: 0,
+    confidencialidad: 0,
+    integridad: 0,
+    disponibilidad: 0,
+    responsabilidad: 0,
+    financiero: 0,
+    reputacion: 0,
+    cumplimiento: 0,
+    privacidad: 0,
+    totalProbabilidad: 0,
+    totalImpacto: 0,
+    _id: "",
+    __v: 0,
+  });
+
+  const enviarRiesgo = () => {
+    console.log("Data a enviar: ");
+    console.log(dataRisk);
+    fetch("api/v1/risk/guardar", {
       headers: {
         "Content-Type": "application/json",
       },
-      method: "GET",
+      method: "POST",
+      body: dataRisk,
     })
       .then((response) => response.json())
       .then((response) => console.log(response))
       .catch(() => console.log("Algo pasó"));
   };
 
-  const updateVal = (tema, posicion, valor) => {
-    /* let newData;
-    switch (tema) {
-      case "agentes":
-        newData = valAgentes;
-        newData[posicion] = valor;
-        setValAgentes(newData);
+  const updateRiesgos = () => {
+    setValProbabilidad(
+      (parseInt(dataRisk.habilidad) +
+        parseInt(dataRisk.motivo) +
+        parseInt(dataRisk.oportunidad) +
+        parseInt(dataRisk.tamannio) +
+        parseInt(dataRisk.descubrimiento) +
+        parseInt(dataRisk.explotacion) +
+        parseInt(dataRisk.conciencia) +
+        parseInt(dataRisk.deteccion)) /
+        8
+    );
+
+    setValTecnico(
+      (parseInt(dataRisk.confidencialidad) +
+        parseInt(dataRisk.integridad) +
+        parseInt(dataRisk.disponibilidad) +
+        parseInt(dataRisk.responsabilidad)) /
+        4
+    );
+
+    setValNegocio(
+      (parseInt(dataRisk.financiero) +
+        parseInt(dataRisk.reputacion) +
+        parseInt(dataRisk.cumplimiento) +
+        parseInt(dataRisk.privacidad)) /
+        4
+    );
+
+    setValImpacto(
+      (parseInt(dataRisk.confidencialidad) +
+        parseInt(dataRisk.integridad) +
+        parseInt(dataRisk.disponibilidad) +
+        parseInt(dataRisk.responsabilidad) +
+        parseInt(dataRisk.financiero) +
+        parseInt(dataRisk.reputacion) +
+        parseInt(dataRisk.cumplimiento) +
+        parseInt(dataRisk.privacidad)) /
+        8
+    );
+  };
+
+  const updateVal = (e) => {
+    let dataFactor = e.target.id.split("-");
+    let newData = dataRisk;
+    switch (dataFactor[1]) {
+      case "1":
+        newData.habilidad = e.target.value;
         break;
-      case "vulnerabilidades":
-        newData = valVulne;
-        newData[posicion] = valor;
-        setValVulne(newData);
+      case "2":
+        newData.motivo = e.target.value;
+        break;
+      case "3":
+        newData.oportunidad = e.target.value;
+        break;
+      case "4":
+        newData.tamannio = e.target.value;
+        break;
+      case "5":
+        newData.descubrimiento = e.target.value;
+        break;
+      case "6":
+        newData.explotacion = e.target.value;
+        break;
+      case "7":
+        newData.conciencia = e.target.value;
+        break;
+      case "8":
+        newData.deteccion = e.target.value;
+        break;
+      case "9":
+        newData.confidencialidad = e.target.value;
+        break;
+      case "10":
+        newData.integridad = e.target.value;
+        break;
+      case "11":
+        newData.disponibilidad = e.target.value;
+        break;
+      case "12":
+        newData.responsabilidad = e.target.value;
+        break;
+      case "13":
+        newData.financiero = e.target.value;
+        break;
+      case "14":
+        newData.reputacion = e.target.value;
+        break;
+      case "15":
+        newData.cumplimiento = e.target.value;
+        break;
+      case "16":
+        newData.privacidad = e.target.value;
         break;
       default:
+        newData.nombre = e.target.value;
         break;
     }
-    updateProbabilidad(); */
+    setDataRisk(newData);
+    updateRiesgos();
   };
 
   return (
     <>
+      <input
+        type="text"
+        className="form-control mb-2"
+        placeholder="Ingresa el nombre del Riesgo"
+        onChange={updateVal}
+      />
       {/* Estimación de Probabilidad */}
       <div className="card card-success">
         <div className="card-header">
@@ -329,42 +450,44 @@ const Calculadora = () => {
                   <table className="table table-striped">
                     <thead className="bg-light">
                       <tr>
-                        <th title={agente.uno.info}>{agente.uno.nombre}</th>
-                        <th title={agente.dos.info}>{agente.dos.nombre}</th>
-                        <th title={agente.tres.info}>{agente.tres.nombre}</th>
-                        <th title={agente.cuatro.info}>
-                          {agente.cuatro.nombre}
-                        </th>
+                        <th title={agente[0].info}>{agente[0].nombre}</th>
+                        <th title={agente[1].info}>{agente[1].nombre}</th>
+                        <th title={agente[2].info}>{agente[2].nombre}</th>
+                        <th title={agente[3].info}>{agente[3].nombre}</th>
                       </tr>
                     </thead>
                     <tbody>
                       <tr>
-                        <td>
+                        <td onChange={updateVal}>
                           <Selector
-                            name={agente.uno.nombre}
-                            opciones={agente.uno.opciones}
-                            info={agente.uno.info}
+                            name={agente[0].nombre}
+                            opciones={agente[0].opciones}
+                            info={agente[0].info}
+                            factor={"1-1"}
                           />
                         </td>
-                        <td>
+                        <td onChange={updateVal}>
                           <Selector
-                            name={agente.dos.nombre}
-                            opciones={agente.dos.opciones}
-                            info={agente.dos.info}
+                            name={agente[1].nombre}
+                            opciones={agente[1].opciones}
+                            info={agente[1].info}
+                            factor={"1-2"}
                           />
                         </td>
-                        <td>
+                        <td onChange={updateVal}>
                           <Selector
-                            name={agente.tres.nombre}
-                            opciones={agente.tres.opciones}
-                            info={agente.tres.info}
+                            name={agente[2].nombre}
+                            opciones={agente[2].opciones}
+                            info={agente[2].info}
+                            factor={"1-3"}
                           />
                         </td>
-                        <td>
+                        <td onChange={updateVal}>
                           <Selector
-                            name={agente.cuatro.nombre}
-                            opciones={agente.cuatro.opciones}
-                            info={agente.cuatro.info}
+                            name={agente[3].nombre}
+                            opciones={agente[3].opciones}
+                            info={agente[3].info}
+                            factor={"1-4"}
                           />
                         </td>
                       </tr>
@@ -394,48 +517,52 @@ const Calculadora = () => {
                   <table className="table table-striped">
                     <thead className="bg-light">
                       <tr>
-                        <th title={vulnerabilidad.uno.info}>
-                          {vulnerabilidad.uno.nombre}
+                        <th title={vulnerabilidad[0].info}>
+                          {vulnerabilidad[0].nombre}
                         </th>
-                        <th title={vulnerabilidad.dos.info}>
-                          {vulnerabilidad.dos.nombre}
+                        <th title={vulnerabilidad[1].info}>
+                          {vulnerabilidad[1].nombre}
                         </th>
-                        <th title={vulnerabilidad.tres.info}>
-                          {vulnerabilidad.tres.nombre}
+                        <th title={vulnerabilidad[2].info}>
+                          {vulnerabilidad[2].nombre}
                         </th>
-                        <th title={vulnerabilidad.cuatro.info}>
-                          {vulnerabilidad.cuatro.nombre}
+                        <th title={vulnerabilidad[3].info}>
+                          {vulnerabilidad[3].nombre}
                         </th>
                       </tr>
                     </thead>
                     <tbody>
                       <tr>
-                        <td>
+                        <td onChange={updateVal}>
                           <Selector
-                            name={vulnerabilidad.uno.nombre}
-                            opciones={vulnerabilidad.uno.opciones}
-                            info={vulnerabilidad.uno.info}
+                            name={vulnerabilidad[0].nombre}
+                            opciones={vulnerabilidad[0].opciones}
+                            info={vulnerabilidad[0].info}
+                            factor={"2-5"}
                           />
                         </td>
-                        <td>
+                        <td onChange={updateVal}>
                           <Selector
-                            name={vulnerabilidad.dos.nombre}
-                            opciones={vulnerabilidad.dos.opciones}
-                            info={vulnerabilidad.dos.info}
+                            name={vulnerabilidad[1].nombre}
+                            opciones={vulnerabilidad[1].opciones}
+                            info={vulnerabilidad[1].info}
+                            factor={"2-6"}
                           />
                         </td>
-                        <td>
+                        <td onChange={updateVal}>
                           <Selector
-                            name={vulnerabilidad.tres.nombre}
-                            opciones={vulnerabilidad.tres.opciones}
-                            info={vulnerabilidad.tres.info}
+                            name={vulnerabilidad[2].nombre}
+                            opciones={vulnerabilidad[2].opciones}
+                            info={vulnerabilidad[2].info}
+                            factor={"2-7"}
                           />
                         </td>
-                        <td>
+                        <td onChange={updateVal}>
                           <Selector
-                            name={vulnerabilidad.cuatro.nombre}
-                            opciones={vulnerabilidad.cuatro.opciones}
-                            info={vulnerabilidad.cuatro.info}
+                            name={vulnerabilidad[3].nombre}
+                            opciones={vulnerabilidad[3].opciones}
+                            info={vulnerabilidad[3].info}
+                            factor={"2-8"}
                           />
                         </td>
                       </tr>
@@ -450,17 +577,17 @@ const Calculadora = () => {
           </div>
         </div>
         {/* Ponderación */}
-        <Ponderacion valor={4.4} />
+        <Ponderacion valor={valProbabilidad} />
         {/* ./Ponderación */}
       </div>
       {/* ./ Estimación de Probabilidad */}
-      {/* Estimación de Impacto */}
 
+      {/* Estimación de Impacto */}
       <div className="card card-info">
         <div className="card-header">
           <h3 className="card-title">
             <i className="fa-solid fa-star" />
-            Estimación de Imapcto
+            Estimación de Impacto
             <i className="fa-solid fa-star" />
           </h3>
         </div>
@@ -483,42 +610,44 @@ const Calculadora = () => {
                   <table className="table table-striped">
                     <thead className="bg-light">
                       <tr>
-                        <th title={tecnico.uno.info}>{tecnico.uno.nombre}</th>
-                        <th title={tecnico.dos.info}>{tecnico.dos.nombre}</th>
-                        <th title={tecnico.tres.info}>{tecnico.tres.nombre}</th>
-                        <th title={tecnico.cuatro.info}>
-                          {tecnico.cuatro.nombre}
-                        </th>
+                        <th title={tecnico[0].info}>{tecnico[0].nombre}</th>
+                        <th title={tecnico[1].info}>{tecnico[1].nombre}</th>
+                        <th title={tecnico[2].info}>{tecnico[2].nombre}</th>
+                        <th title={tecnico[3].info}>{tecnico[3].nombre}</th>
                       </tr>
                     </thead>
                     <tbody>
                       <tr>
-                        <td>
+                        <td onChange={updateVal}>
                           <Selector
-                            name={tecnico.uno.nombre}
-                            opciones={tecnico.uno.opciones}
-                            info={tecnico.uno.info}
+                            name={tecnico[0].nombre}
+                            opciones={tecnico[0].opciones}
+                            info={tecnico[0].info}
+                            factor={"3-9"}
                           />
                         </td>
-                        <td>
+                        <td onChange={updateVal}>
                           <Selector
-                            name={tecnico.dos.nombre}
-                            opciones={tecnico.dos.opciones}
-                            info={tecnico.dos.info}
+                            name={tecnico[1].nombre}
+                            opciones={tecnico[1].opciones}
+                            info={tecnico[1].info}
+                            factor={"3-10"}
                           />
                         </td>
-                        <td>
+                        <td onChange={updateVal}>
                           <Selector
-                            name={tecnico.tres.nombre}
-                            opciones={tecnico.tres.opciones}
-                            info={tecnico.tres.info}
+                            name={tecnico[2].nombre}
+                            opciones={tecnico[2].opciones}
+                            info={tecnico[2].info}
+                            factor={"3-11"}
                           />
                         </td>
-                        <td>
+                        <td onChange={updateVal}>
                           <Selector
-                            name={tecnico.cuatro.nombre}
-                            opciones={tecnico.cuatro.opciones}
-                            info={tecnico.cuatro.info}
+                            name={tecnico[3].nombre}
+                            opciones={tecnico[3].opciones}
+                            info={tecnico[3].info}
+                            factor={"3-12"}
                           />
                         </td>
                       </tr>
@@ -526,7 +655,7 @@ const Calculadora = () => {
                   </table>
                 </div>
                 {/* /.card-body */}
-                <Ponderacion valor={4.4} />
+                <Ponderacion valor={valTecnico} />
               </div>
               {/* /.card */}
             </div>
@@ -549,42 +678,44 @@ const Calculadora = () => {
                   <table className="table table-striped">
                     <thead className="bg-light">
                       <tr>
-                        <th title={negocio.uno.info}>{negocio.uno.nombre}</th>
-                        <th title={negocio.dos.info}>{negocio.dos.nombre}</th>
-                        <th title={negocio.tres.info}>{negocio.tres.nombre}</th>
-                        <th title={negocio.cuatro.info}>
-                          {negocio.cuatro.nombre}
-                        </th>
+                        <th title={negocio[0].info}>{negocio[0].nombre}</th>
+                        <th title={negocio[1].info}>{negocio[1].nombre}</th>
+                        <th title={negocio[2].info}>{negocio[2].nombre}</th>
+                        <th title={negocio[3].info}>{negocio[3].nombre}</th>
                       </tr>
                     </thead>
                     <tbody>
                       <tr>
-                        <td>
+                        <td onChange={updateVal}>
                           <Selector
-                            name={negocio.uno.nombre}
-                            opciones={negocio.uno.opciones}
-                            info={negocio.uno.info}
+                            name={negocio[0].nombre}
+                            opciones={negocio[0].opciones}
+                            info={negocio[0].info}
+                            factor={"4-13"}
                           />
                         </td>
-                        <td>
+                        <td onChange={updateVal}>
                           <Selector
-                            name={negocio.dos.nombre}
-                            opciones={negocio.dos.opciones}
-                            info={negocio.dos.info}
+                            name={negocio[1].nombre}
+                            opciones={negocio[1].opciones}
+                            info={negocio[1].info}
+                            factor={"4-14"}
                           />
                         </td>
-                        <td>
+                        <td onChange={updateVal}>
                           <Selector
-                            name={negocio.tres.nombre}
-                            opciones={negocio.tres.opciones}
-                            info={negocio.tres.info}
+                            name={negocio[2].nombre}
+                            opciones={negocio[2].opciones}
+                            info={negocio[2].info}
+                            factor={"4-15"}
                           />
                         </td>
-                        <td>
+                        <td onChange={updateVal}>
                           <Selector
-                            name={negocio.cuatro.nombre}
-                            opciones={negocio.cuatro.opciones}
-                            info={negocio.cuatro.info}
+                            name={negocio[3].nombre}
+                            opciones={negocio[3].opciones}
+                            info={negocio[3].info}
+                            factor={"4-16"}
                           />
                         </td>
                       </tr>
@@ -592,15 +723,36 @@ const Calculadora = () => {
                   </table>
                 </div>
                 {/* /.card-body */}
-              <Ponderacion valor={4.4} />
+                <Ponderacion valor={valNegocio} />
               </div>
               {/* /.card */}
             </div>
             {/* /.Impacto del Negocio */}
           </div>
         </div>
-        <Ponderacion valor={4.4} />
-        {/* ./ Estimación de Impacto */}
+        <Ponderacion valor={valImpacto} />
+      </div>
+      {/* ./ Estimación de Impacto */}
+
+      {/* Gravedad */}
+      <div className="card card-success">
+        <div className="card-header">
+          <h3 className="card-title">
+            <i className="fa-solid fa-star" />
+            Gravedad
+            <i className="fa-solid fa-star" />
+          </h3>
+        </div>
+        <div className="card-body">
+          <Gravedad impacto={valImpacto} probabilidad={valProbabilidad} />
+        </div>
+        <button
+          type="button"
+          className="btn btn-block btn-success btn-sm mb-2"
+          onClick={enviarRiesgo}
+        >
+          Guardar Riesgo
+        </button>
       </div>
     </>
   );

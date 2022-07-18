@@ -21,7 +21,7 @@ const Ponderacion = ({ valor }) => {
           <div className="col-auto">
             <div className="info-box bg-warning">
               <span className="info-box-icon">
-                <i class="fas fa-exclamation-triangle"></i>
+                <i className="fas fa-exclamation-triangle"></i>
               </span>
               <div className="info-box-content">
                 <span className="info-box-text">Medio</span>
@@ -34,7 +34,7 @@ const Ponderacion = ({ valor }) => {
           <div className="col-auto">
             <div className="info-box bg-danger">
               <span className="info-box-icon">
-                <i class="fas fa-times-circle"></i>
+                <i className="fas fa-times-circle"></i>
               </span>
               <div className="info-box-content">
                 <span className="info-box-text">Alto</span>
