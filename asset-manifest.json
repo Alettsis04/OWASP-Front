@@ -1,0 +1,19 @@
+{
+  "files": {
+    "main.css": "/OWASP-Riesgos/static/css/main.e6c13ad2.css",
+    "main.js": "/OWASP-Riesgos/static/js/main.bf0bce41.js",
+    "static/js/787.c1112931.chunk.js": "/OWASP-Riesgos/static/js/787.c1112931.chunk.js",
+    "static/media/logoUNL.png": "/OWASP-Riesgos/static/media/logoUNL.42355f5804e499d490c5.png",
+    "static/media/user.png": "/OWASP-Riesgos/static/media/user.2c4c27767ebbfa9db65b.png",
+    "static/media/logo.png": "/OWASP-Riesgos/static/media/logo.fad0dd328e7665e74e86.png",
+    "static/media/logoCIS.jpg": "/OWASP-Riesgos/static/media/logoCIS.244f5cdeb662a5f68da9.jpg",
+    "index.html": "/OWASP-Riesgos/index.html",
+    "main.e6c13ad2.css.map": "/OWASP-Riesgos/static/css/main.e6c13ad2.css.map",
+    "main.bf0bce41.js.map": "/OWASP-Riesgos/static/js/main.bf0bce41.js.map",
+    "787.c1112931.chunk.js.map": "/OWASP-Riesgos/static/js/787.c1112931.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.e6c13ad2.css",
+    "static/js/main.bf0bce41.js"
+  ]
+}
