@@ -32,7 +32,7 @@ const Footer = () => {
       {viewAll && (
         <>
           <div className="row">
-            <div className="col-md-4">
+            <div className="col-md-3">
               {/* Widget: user widget style 2 */}
               <div className="card card-widget widget-user-2 shadow-sm">
                 {/* Add the bg color to the header using any of the bg-* classes */}
@@ -69,7 +69,7 @@ const Footer = () => {
               {/* /.widget-user */}
             </div>
 
-            <div className="col-md-4">
+            <div className="col-md-3">
               {/* Widget: user widget style 2 */}
               <div className="card card-widget widget-user-2 shadow-sm">
                 {/* Add the bg color to the header using any of the bg-* classes */}
@@ -106,7 +106,7 @@ const Footer = () => {
               {/* /.widget-user */}
             </div>
 
-            <div className="col-md-4">
+            <div className="col-md-3">
               {/* Widget: user widget style 2 */}
               <div className="card card-widget widget-user-2 shadow-sm">
                 {/* Add the bg color to the header using any of the bg-* classes */}
@@ -143,7 +143,7 @@ const Footer = () => {
               {/* /.widget-user */}
             </div>
 
-            <div className="col-md-4">
+            <div className="col-md-3">
               {/* Widget: user widget style 2 */}
               <div className="card card-widget widget-user-2 shadow-sm">
                 {/* Add the bg color to the header using any of the bg-* classes */}
